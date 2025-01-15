@@ -12,7 +12,9 @@ import TextField from "@mui/material/TextField";
 const colors = {
     colorGrey: "#c7d1d3",
     colorUp: "#4caf50",
-    colorDown: "#f44336"
+    colorDown: "#f44336",
+    colorSGUp: "#4ED2B3",
+    colorSGDown: "#FF8A8A",
 }
 
 const TextFieldcolors = {
@@ -75,9 +77,9 @@ export function ThumbsWithQualiFeedback(props) {
         thumbDownColor = colors["colorDown"]
         thumbHoverDownColor = colors["colorDown"]
     } else {
-        thumbUpColor = colors["colorGrey"]
+        thumbUpColor = colors["colorSGUp"]
         thumbHoverUpColor = colors["colorUp"]
-        thumbDownColor = colors["colorGrey"]
+        thumbDownColor = colors["colorSGDown"]
         thumbHoverDownColor = colors["colorDown"]
     }
 
