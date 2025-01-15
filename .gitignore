@@ -1,8 +1,8 @@
 venv/
 streamlit_feedback/frontend/node_modules
-streamlit_feedback/frontend/build
+#streamlit_feedback/frontend/build
 *.egg-info/
-build/
+#.build/
 dist/
 .streamlit/secrets.toml
 __pycache__/
