@@ -136,7 +136,7 @@ if not _RELEASE:
 
     # Added a try-except to make setting up the development environment for this project easier.
     try:
-        from examples import (
+        from streamlit_feedback.examples import (
             bare_bones_app,
             basic_app,
             chatbot_thumbs_app,
@@ -144,7 +144,7 @@ if not _RELEASE:
             streaming_chatbot,
         )
     except:
-        from examples import (
+        from streamlit_feedback.examples import (
             bare_bones_app,
             basic_app,
             chatbot_thumbs_app,

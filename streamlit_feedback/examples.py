@@ -1,4 +1,4 @@
-import openai
+# import openai
 import streamlit as st
 
 
@@ -49,60 +49,64 @@ def chatbot_thumbs_app(streamlit_feedback, debug=False):
 
 
 def single_prediction_faces_app(streamlit_feedback, debug=False):
-    st.title("LLM User Feedback with Trubrics")
+    pass
 
-    if "response" not in st.session_state:
-        st.session_state["response"] = ""
-    if "feedback_key" not in st.session_state:
-        st.session_state.feedback_key = 0
 
-    with st.sidebar:
-        openai_api_key = st.text_input(
-            "OpenAI API Key",
-            key="chatbot_api_key",
-            type="password",
-            value=st.secrets.get("OPENAI_API_KEY"),
-        )
+#     st.title("LLM User Feedback with Trubrics")
 
-    if not openai_api_key:
-        st.info("Please add your OpenAI API key to continue.")
-        st.stop()
-    else:
-        openai.api_key = openai_api_key
+#     if "response" not in st.session_state:
+#         st.session_state["response"] = ""
+#     if "feedback_key" not in st.session_state:
+#         st.session_state.feedback_key = 0
 
-    prompt = st.text_area(
-        label="Prompt",
-        label_visibility="collapsed",
-        placeholder="What would you like to know?",
-    )
-    button = st.button(f"Ask text-davinci-002")
+#     with st.sidebar:
+#         openai_api_key = st.text_input(
+#             "OpenAI API Key",
+#             key="chatbot_api_key",
+#             type="password",
+#             value=st.secrets.get("OPENAI_API_KEY"),
+#         )
 
-    if button:
-        if debug:
-            st.session_state["response"] = "dummy response: " + prompt.strip()
-        else:
-            st.session_state["response"] = openai.Completion.create(
-                model="text-davinci-002", prompt=prompt, temperature=0.5, max_tokens=200
-            )
-            st.session_state["response"] = (
-                st.session_state["response"].choices[0].text.replace("\n", "")
-            )
-        st.session_state.feedback_key += 1  # overwrite feedback component
+#     if not openai_api_key:
+#         st.info("Please add your OpenAI API key to continue.")
+#         st.stop()
+#     else:
+#         openai.api_key = openai_api_key
 
-    if st.session_state["response"]:
-        st.markdown(f"#### :violet[{st.session_state['response']}]")
+#     prompt = st.text_area(
+#         label="Prompt",
+#         label_visibility="collapsed",
+#         placeholder="What would you like to know?",
+#     )
+#     button = st.button(f"Ask text-davinci-002")
 
-        streamlit_feedback(
-            feedback_type="faces",
-            optional_text_label="Please provide extra information",
-            review_on_positive=False,
-            align="flex-start",
-            on_submit=_submit_feedback,
-            key=f"feedback_{st.session_state.feedback_key}",
-        )
+#     if button:
+#         if debug:
+#             st.session_state["response"] = "dummy response: " + prompt.strip()
+#         else:
+#             st.session_state["response"] = openai.Completion.create(
+#                 model="text-davinci-002", prompt=prompt, temperature=0.5, max_tokens=200
+#             )
+#             st.session_state["response"] = (
+#                 st.session_state["response"].choices[0].text.replace("\n", "")
+#             )
+#         st.session_state.feedback_key += 1  # overwrite feedback component
+
+#     if st.session_state["response"]:
+#         st.markdown(f"#### :violet[{st.session_state['response']}]")
+
+#         streamlit_feedback(
+#             feedback_type="faces",
+#             optional_text_label="Please provide extra information",
+#             review_on_positive=False,
+#             align="flex-start",
+#             on_submit=_submit_feedback,
+#             key=f"feedback_{st.session_state.feedback_key}",
+#         )
 
 
 def basic_app(streamlit_feedback, debug):
+
     st.title("Component demo")
 
     if "feedback_key" not in st.session_state:
@@ -147,67 +151,73 @@ def bare_bones_app(streamlit_feedback, debug):
 
 
 def streaming_chatbot(streamlit_feedback, debug):
+    pass
 
-    st.title("💬 Streaming Chatbot")
 
-    openai.api_key = st.secrets["OPENAI_API_KEY"]
+#     st.title("💬 Streaming Chatbot")
 
-    if "openai_model" not in st.session_state:
-        st.session_state["openai_model"] = "gpt-3.5-turbo"
+#     openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-    if "feedback_key" not in st.session_state:
-        st.session_state.feedback_key = 0
+#     if "openai_model" not in st.session_state:
+#         st.session_state["openai_model"] = "gpt-3.5-turbo"
 
-    feedback_kwargs = {
-        "feedback_type": "thumbs",
-        "optional_text_label": "Please provide extra information",
-        "on_submit": _submit_feedback,
-    }
+#     if "messages" not in st.session_state:
+#         st.session_state.messages = []
+#     if "feedback_key" not in st.session_state:
+#         st.session_state.feedback_key = 0
 
-    for n, msg in enumerate(st.session_state.messages):
-        st.chat_message(msg["role"]).write(msg["content"])
+#     feedback_kwargs = {
+#         "feedback_type": "thumbs",
+#         "optional_text_label": "Please provide extra information",
+#         "on_submit": _submit_feedback,
+#     }
 
-        if msg["role"] == "assistant" and n > 1:
-            feedback_key = f"feedback_{int(n/2)}"
+#     for n, msg in enumerate(st.session_state.messages):
+#         st.chat_message(msg["role"]).write(msg["content"])
 
-            if feedback_key not in st.session_state:
-                st.session_state[feedback_key] = None
+#         if msg["role"] == "assistant" and n > 1:
+#             feedback_key = f"feedback_{int(n/2)}"
 
-            disable_with_score = (
-                st.session_state[feedback_key].get("score")
-                if st.session_state[feedback_key]
-                else None
-            )
-            streamlit_feedback(
-                **feedback_kwargs,
-                key=feedback_key,
-                disable_with_score=disable_with_score,
-            )
+#             if feedback_key not in st.session_state:
+#                 st.session_state[feedback_key] = None
 
-    if prompt := st.chat_input("What is up?"):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-        with st.chat_message("assistant"):
-            message_placeholder = st.empty()
-            full_response = ""
+#             disable_with_score = (
+#                 st.session_state[feedback_key].get("score")
+#                 if st.session_state[feedback_key]
+#                 else None
+#             )
+#             streamlit_feedback(
+#                 **feedback_kwargs,
+#                 key=feedback_key,
+#                 disable_with_score=disable_with_score,
+#             )
 
-            for response in openai.ChatCompletion.create(
-                model=st.session_state["openai_model"],
-                messages=[
-                    {"role": m["role"], "content": m["content"]}
-                    for m in st.session_state.messages
-                ],
-                stream=True,
-            ):
-                full_response += response.choices[0].delta.get("content", "")
-                message_placeholder.markdown(full_response + "▌")
-            message_placeholder.markdown(full_response)
-        st.session_state.messages.append(
-            {"role": "assistant", "content": full_response}
-        )
-        streamlit_feedback(
-            **feedback_kwargs, key=f"feedback_{int(len(st.session_state.messages)/2)}"
-        )
+#     if prompt := st.chat_input("What is up?"):
+#         st.session_state.messages.append({"role": "user", "content": prompt})
+#         with st.chat_message("user"):
+#             st.markdown(prompt)
+#         with st.chat_message("assistant"):
+#             message_placeholder = st.empty()
+#             full_response = ""
+
+#             for response in openai.ChatCompletion.create(
+#                 model=st.session_state["openai_model"],
+#                 messages=[
+#                     {"role": m["role"], "content": m["content"]}
+#                     for m in st.session_state.messages
+#                 ],
+#                 stream=True,
+#             ):
+#                 full_response += response.choices[0].delta.get("content", "")
+#                 message_placeholder.markdown(full_response + "▌")
+#             message_placeholder.markdown(full_response)
+#         st.session_state.messages.append(
+#             {"role": "assistant", "content": full_response}
+#         )
+#         streamlit_feedback(
+#             **feedback_kwargs, key=f"feedback_{int(len(st.session_state.messages)/2)}"
+#         )
+
+
+if __name__ == "__main__":
+    chatbot_thumbs_app()
