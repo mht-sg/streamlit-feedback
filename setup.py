@@ -11,7 +11,7 @@ setuptools.setup(
     author="Jeff Kayne",
     author_email="jeff.kayne@trubrics.com",
     description=(
-        "Streamlit component that allows you to collect user feedback in your apps"
+        "Streamlit component that allows you to collect user feedback in your apps. Additional changes made by mht-sg"
     ),
     long_description=long_description,
     long_description_content_type="text/markdown",
