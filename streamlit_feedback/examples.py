@@ -39,7 +39,7 @@ def chatbot_thumbs_app(streamlit_feedback, debug=False):
         st.chat_message("user").write(prompt)
 
         response = prompt
-        st.session_state["response"] = response.choices[0].message.content
+        st.session_state["response"] = response
         with st.chat_message("assistant"):
             messages.append(
                 {"role": "assistant", "content": st.session_state["response"]}
