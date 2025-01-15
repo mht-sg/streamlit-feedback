@@ -10,14 +10,6 @@ def _submit_feedback(user_response, emoji=None):
 def chatbot_thumbs_app(streamlit_feedback, debug=False):
     st.title("💬 Chatbot")
 
-    with st.sidebar:
-        openai_api_key = st.text_input(
-            "OpenAI API Key",
-            key="chatbot_api_key",
-            type="password",
-            value=st.secrets.get("OPENAI_API_KEY"),
-        )
-
     if "messages" not in st.session_state:
         st.session_state["messages"] = [
             {"role": "assistant", "content": "How can I help you?"}
@@ -46,18 +38,8 @@ def chatbot_thumbs_app(streamlit_feedback, debug=False):
         messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
-        if debug:
-            st.session_state["response"] = "dummy response"
-        else:
-            if not openai_api_key:
-                st.info("Please add your OpenAI API key to continue.")
-                st.stop()
-            else:
-                openai.api_key = openai_api_key
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo", messages=messages
-            )
-            st.session_state["response"] = response.choices[0].message.content
+        response = prompt
+        st.session_state["response"] = response.choices[0].message.content
         with st.chat_message("assistant"):
             messages.append(
                 {"role": "assistant", "content": st.session_state["response"]}
